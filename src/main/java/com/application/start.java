@@ -1,4 +1,4 @@
-package com.aplication;
+package com.application;
 
 public class start {
 
