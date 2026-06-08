@@ -33,23 +33,23 @@ public class PacienteService {
 				paciente.setTelefone(resultSet.getString(4));
 				
 				pacientes.add(paciente);
-									
 			}
 			
 			return pacientes;
-					
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Um erro ao tentar as Strings");
 		}		
 	}
-	public Paciente findByNome(String nome) {
+	public List<Paciente> findByNome(String nome) {
 		
 		String sql = "SELECT * FROM PACIENTE WHERE NOME LIKE '%?%'";
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
 			
 			preparedStatement.setString(1, nome);
 			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			List<Paciente> pacientes = new ArrayList<>();
 			
 			Paciente paciente = new Paciente();
 			
@@ -60,14 +60,14 @@ public class PacienteService {
 				paciente.setEndereco(resultSet.getString(3));
 				paciente.setTelefone(resultSet.getString(4));
 				
+				pacientes.add(paciente);
 			}
 			
-			return paciente;
+			return pacientes;
 							
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Um erro ao tentar as Strings");
 		}
-				
 	}
 }

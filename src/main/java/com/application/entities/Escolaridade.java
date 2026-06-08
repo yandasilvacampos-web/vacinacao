@@ -5,7 +5,7 @@ public class Escolaridade {
 	private Integer id_escolaridade;
 	private String turma;
 	private String ensino;
-	private String ano;
+	private int ano;
 	private Integer id_paciente;
 	
 	public Integer getId_escolaridade() {
@@ -26,10 +26,10 @@ public class Escolaridade {
 	public void setEnsino(String ensino) {
 		this.ensino = ensino;
 	}
-	public String getAno() {
+	public int getAno() {
 		return ano;
 	}
-	public void setAno(String ano) {
+	public void setAno(int ano) {
 		this.ano = ano;
 	}
 	public Integer getId_paciente() {

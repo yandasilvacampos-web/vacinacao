@@ -4,6 +4,16 @@ public class Doenca {
 	
 	private int id_doenca;
 	private String nomedoenca;
+	private int id_vacina;
+	
+	
+	public int getId_vacina() {
+		return id_vacina;
+	}
+	
+	public void setId_vacina(int id_vacina) {
+		this.id_vacina = id_vacina;
+	}
 	
 	public int getId_doenca() {
 		return id_doenca;
