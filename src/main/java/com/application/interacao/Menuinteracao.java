@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Menuinteracao{
     
-    private  Connection connection;
+    private Connection connection;
     
     public Menuinteracao (Connection connection) {
     	this.connection = connection;
@@ -17,13 +17,15 @@ public class Menuinteracao{
     	
     	boolean codigo_invalido = true;
     	
-    	while (codigo_invalido);
+    	while (codigo_invalido) {
     	
     		codigo_invalido = false;
     	
 	    	System.out.println("1 - Pacientes:");
 	    	System.out.println("2 - Doenças:");
 	    	System.out.println("3 - Vacinas: ");
+	    	
+	    	escolha = scanner.nextInt();
 	    	
 	    	switch (escolha) {
 	    	
@@ -41,6 +43,7 @@ public class Menuinteracao{
 	    		System.out.println("Código Inválido, tente novamente");
 	            codigo_invalido = true;
 	    	}
+    	}
     	
     	scanner.close();
     }

@@ -1,6 +1,7 @@
 package com.application.services;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -16,39 +17,35 @@ public class RegiaoService {
         this.connection = connection;
     }
 
-    public List<Regiao> findRegioesByIdUser(int idPaciente) {
-        List<Regiao> listaDeRegioes = new ArrayList<>();
-        Statement Statement;
-        
-        try {
-       
-            String query = String.format(
-                "SELECT id_regiao, cidade, estado, bairro, setor, quadra, lote, id_paciente " +
-                "FROM public.regiao WHERE id_paciente = %d;", 
-                idPaciente
-            );
-            
-            Statement = connection.createStatement();
-            ResultSet ResultSet= Statement.executeQuery(query); 
-            
-            
-            while (ResultSet.next()) {
-                Regiao regiao = new Regiao();
-    
-                regiao.setCidade(ResultSet.getString("cidade"));
-                regiao.setEstado(ResultSet.getString("estado"));
-                regiao.setBairro(ResultSet.getString("bairro"));
-                regiao.setQuadra(ResultSet.getString("quadra"));
-                regiao.setLote(ResultSet.getString("lote"));              
-            
-                listaDeRegioes.add(regiao);
-            }
-            
-        } catch (Exception e) {
-           
-            System.out.println("Erro buscar a região do paciente " + idPaciente + ": ");
-        }
-        
-        return listaDeRegioes;
+    public List<Regiao> regioes() {
+    	
+    	String sql = "SELECT * FROM REGIAO";
+    	
+    	try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+    		
+    		List<Regiao> regioes = new ArrayList<>();
+    		
+    		ResultSet resultSet = preparedStatement.executeQuery();
+    		
+    		while(resultSet.next()) {
+    			
+    			Regiao regiao = new Regiao();
+    			
+    			regiao.setIdregiao(resultSet.getInt("id_regiao"));
+    			regiao.setCidade(resultSet.getString("cidade"));
+    			regiao.setEstado(resultSet.getString("estado"));
+    			regiao.setBairro(resultSet.getString("setor"));
+    			regiao.setQuadra(resultSet.getString("quadra"));
+    			regiao.setLote(resultSet.getString("lote"));
+    			
+    			regioes.add(regiao);
+    		}
+    		
+    		return regioes;
+    		
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		throw new RuntimeException("Um erro ao tentar buscar todas as regiões");
+    	}
     }
 }

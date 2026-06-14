@@ -39,4 +39,9 @@ public class Escolaridade {
 		this.id_paciente = id_paciente;
 	}
 	
+	@Override
+	public String toString() {
+		return "Escolaridade [id_escolaridade=" + id_escolaridade + ", turma=" + turma + ", ensino=" + ensino + ", ano="
+				+ ano + ", id_paciente=" + id_paciente + "]";
+	}
 }

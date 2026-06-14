@@ -1,11 +1,14 @@
 package com.application.services;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import com.application.entities.Doenca;
+import com.application.entities.Paciente;
+import com.application.entities.Vacina;
 
 public class DoencaService {
     
@@ -33,6 +36,33 @@ public class DoencaService {
         }
         return doencas;
     }
+    
+    public Vacina findVacinaReferente(int id_doenca){
+    	
+    	String sql = "select vacina.* from doenca "
+    			+ "left join vacina on vacina.id_vacina = doenca.id_vacina where doenca.id_doenca = ?";
+    	
+    	try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+    		
+    		preparedStatement.setInt(1, id_doenca);
+    		
+    		Vacina vacina = new Vacina();
+    		ResultSet resultSet = preparedStatement.executeQuery();
+    		
+    		while(resultSet.next()) {
+    			vacina.setId_vacina(resultSet.getInt("id_vacina"));
+    			vacina.setTipo(resultSet.getString("tipo"));
+    			vacina.setFabricante(resultSet.getString("fabricante"));
+    			vacina.setNome(resultSet.getString("nome"));
+    		}
+    		
+    		return vacina;
+    		
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		throw new RuntimeException("Um erro ao tentar procurar vacina referente");
+    	}
+    }
 
     public void cadastrar(String nomeDoenca, int idVacina) {
         Statement statement;
@@ -51,28 +81,55 @@ public class DoencaService {
         }
     }
 
-    public List<String> listarPacientesInfectados(int idDoenca) {
-        List<String> listadedoenca = new ArrayList<>();
+    public List<Paciente> listarPacientesInfectados(int idDoenca) {
+        List<Paciente> listaPacientes = new ArrayList<>();
         Statement statement;
         try {
             String query = String.format(
-                "SELECT p.nome, d.doenca FROM public.registro_doenca rd " +
-                "INNER JOIN public.paciente p ON p.id_paciente = rd.id_paciente " +
-                "INNER JOIN public.doenca d ON d.id_doenca = rd.id_doenca " +
-                "WHERE rd.id_doenca = %d;", 
+                "SELECT PACIENTE.* FROM REGISTRO_DOENCA "
+                + "LEFT JOIN DOENCA ON DOENCA.ID_DOENCA = REGISTRO_DOENCA.ID_DOENCA "
+                + "LEFT JOIN PACIENTE ON PACIENTE.ID_PACIENTE = REGISTRO_DOENCA.ID_PACIENTE "
+                + "WHERE DOENCA.ID_DOENCA = %d", 
                 idDoenca
             );
             
             statement = connection.createStatement();
-            ResultSet resultset = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery(query);
             
-            while (resultset.next()) {
-                listadedoenca.add("Paciente: " + resultset.getString("nome") + " | Doença: " + resultset.getString("doenca"));
+            while (rs.next()) {
+                
+            	Paciente paciente = new Paciente();
+                paciente.setId_paciente(rs.getInt("id_paciente")); 
+                paciente.setNome(rs.getString("nome"));
+                paciente.setIdade(rs.getInt("idade"));
+                paciente.setEndereco(rs.getString("endereco"));
+                paciente.setTelefone(rs.getString("telefone"));
+            	
+                listaPacientes.add(paciente);
             }
         } catch (Exception e) {
-            System.out.println("Erro ao listar pacientes doentes: " );
+        	e.printStackTrace();
+        	throw new RuntimeException("Erro ao tentar buscar registro de doença");
         }
-        return listadedoenca;
+        return listaPacientes;
+    }
+    
+    public void atualizarVacinaReferente(int id_doenca, int id_vacina_referente) {
+    	
+    	String sql = "UPDATE DOENCA SET ID_VACINA = ? WHERE ID_DOENCA = ?";
+    	
+    	try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+    		
+    		preparedStatement.setInt(1, id_vacina_referente);
+    		preparedStatement.setInt(2, id_doenca);
+    		
+    		preparedStatement.executeUpdate();
+    		System.out.println("Doença atualiza com sucesso!");
+    		
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		throw new RuntimeException("Erro ao tentarmos atualizar a vacina referente");
+    	}
     }
 
     public void registrarDoencaNoPaciente(int idPaciente, int idDoenca) {
@@ -97,6 +154,7 @@ public class DoencaService {
         Doenca d = new Doenca();
         d.setId_doenca(rs.getInt("id_doenca")); 
         d.setId_vacina(rs.getInt("id_vacina"));
+        d.setNomedoenca(rs.getString("doenca"));
         return d;
     }
 }

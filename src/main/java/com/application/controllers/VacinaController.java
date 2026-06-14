@@ -26,4 +26,14 @@ public class VacinaController {
      
         return vacinaService.buscarPorNome(nome);
     }
+    
+    public void cadastrarVacina(Vacina vacina) {
+    	
+    	vacinaService.cadastrar(vacina);
+    }
+    
+    public void deleteVacinaById(int vacina_id) {
+    	
+    	vacinaService.deleteById(vacina_id);
+    }
 }

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class ConnectionPostgre {
 	private static final String URL = "jdbc:postgresql://localhost:5432/vacinacao";
-	private static final String USER = "postgre";
+	private static final String USER = "postgres";
 	private static final String SENHA = "123";
 
 	 public static Connection getConnection() {

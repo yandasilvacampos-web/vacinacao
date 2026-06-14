@@ -13,11 +13,10 @@ public class start {
 		Scanner scanner = new Scanner(System.in);
 		
 		System.out.println("Seja muito bem vindo:");
-		System.out.println("Ate mais");
 		
-		Connection connecion = ConnectionPostgre.getConnection();
+		Connection connection = ConnectionPostgre.getConnection();
 		 
-		Menuinteracao menuinteracao = new Menuinteracao(connecion);
+		Menuinteracao menuinteracao = new Menuinteracao(connection);
 		menuinteracao.menudeinteracao(scanner);
 		
 		scanner.close();

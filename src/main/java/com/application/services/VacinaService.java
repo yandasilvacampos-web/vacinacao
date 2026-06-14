@@ -1,11 +1,13 @@
 package com.application.services;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.application.dtos.HistoricoVacinasDto;
 import com.application.entities.Vacina;
 
 public class VacinaService {
@@ -91,32 +93,51 @@ public class VacinaService {
     }
 
    
-    public List<String> listarVacinasDoPaciente(int idPaciente) {
-        List<String> historico = new ArrayList<>();
+    public List<HistoricoVacinasDto> listarHistoricoVacinasDoPaciente(int idPaciente) {
         Statement statement;
         
         try {
             String query = String.format(
-                "SELECT p.nome AS paciente_nome, v.nome AS vacina_nome FROM public.registro_vacinas rv " +
-                "INNER JOIN public.paciente p ON p.id_paciente = rv.id_paciente " +
-                "INNER JOIN public.vacina v ON v.id_vacina = rv.id_vacina " +
-                "WHERE rv.id_paciente = %d;", 
+            		"SELECT PACIENTE.NOME AS PACIENTE, VACINA.NOME AS VACINA FROM REGISTRO_VACINAS" +
+            		"LEFT JOIN VACINA ON VACINA.ID_VACINA = REGISTRO_VACINAS.ID_VACINA" + 
+            		"LEFT JOIN PACIENTE ON PACIENTE.ID_PACIENTE = REGISTRO_VACINAS.ID_PACIENTE" +
+            		"WHERE REGISTRO_VACINAS.ID_PACIENTE = %d", 
                 idPaciente
             );
             
             statement = connection.createStatement();
             ResultSet resultset = statement.executeQuery(query);
             
+            List<HistoricoVacinasDto> historicoVacinasDtos = new ArrayList<>();
+            
             while (resultset.next()) {
             
-                String linhaRelatorio = "Paciente: " + resultset.getString("paciente_nome") + 
-               "Vacina Aplicada: " + resultset.getString("vacina_nome");
-                historico.add(linhaRelatorio);
+                HistoricoVacinasDto dto = new HistoricoVacinasDto();
+                dto.setNome_paciente(resultset.getString("PACIENTE"));
+                dto.setNome_vacina(resultset.getString("VACINA"));
+                
+                historicoVacinasDtos.add(dto);
             }
+            
+            return historicoVacinasDtos;
         } catch (Exception e) {
-            System.out.println("Erro  histórico do paciente: " );
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao tentar carregar o histórico de vacinação");
         }
-        return historico;
+    }
+    
+    public void deleteById(int vacina_id) {
+    	
+    	String sql = "DELETE FROM VACINA WHERE ID_VACINA = ?";
+    	
+    	try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+    		preparedStatement.setInt(1, vacina_id);
+    		preparedStatement.executeUpdate();
+    		System.out.println("Vacina deletada com sucesso!");
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		throw new RuntimeException("Erro ao tentar excluir a nossa vacina");
+    	}
     }
 
   

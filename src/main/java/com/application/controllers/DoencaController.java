@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.Statement;
 import com.application.entities.Doenca;
+import com.application.entities.Paciente;
+import com.application.entities.Vacina;
 import com.application.services.DoencaService;
 
 public class DoencaController {
@@ -29,7 +31,23 @@ public class DoencaController {
     }
 
     
-    public List<String> listarInfectados(int idDoenca) {
+    public List<Paciente> listarInfectados(int idDoenca) {
         return doencaService.listarPacientesInfectados(idDoenca);
+    }
+    
+    public Vacina findVacinaReferente(int id_doenca) {
+    	
+    	Vacina vacina = doencaService.findVacinaReferente(id_doenca);
+    	return vacina;
+    }
+    
+    public void cadastrarNovaDoenca(String nomeDoenca, int vacina) {
+    	
+    	doencaService.cadastrar(nomeDoenca, vacina);
+    }
+    
+    public void atualizarVacinaReferente(int doenca_id, int vacina_id_referente) {
+    	
+    	doencaService.atualizarVacinaReferente(doenca_id, vacina_id_referente);
     }
 }

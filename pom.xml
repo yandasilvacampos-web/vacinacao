@@ -19,12 +19,6 @@
   <dependencyManagement>
     <dependencies>  
     <!-- Source: https://mvnrepository.com/artifact/org.postgresql/postgresql -->
-		<dependency>
-		    <groupId>org.postgresql</groupId>
-		    <artifactId>postgresql</artifactId>
-		    <version>42.3.10</version>
-		    <scope>compile</scope>
-		</dependency>
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
@@ -36,6 +30,13 @@
   </dependencyManagement>
 
   <dependencies>
+  
+  <dependency>
+		    <groupId>org.postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <version>42.3.10</version>
+		    <scope>compile</scope>
+		</dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>

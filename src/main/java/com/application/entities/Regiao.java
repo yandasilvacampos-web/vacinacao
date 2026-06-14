@@ -46,4 +46,9 @@ public class Regiao {
 		this.lote = lote;
 	}
 	
+	@Override
+	public String toString() {
+		return "Regiao [idregiao=" + idregiao + ", cidade=" + cidade + ", estado=" + estado + ", bairro=" + bairro
+				+ ", quadra=" + quadra + ", lote=" + lote + "]";
+	}
 }

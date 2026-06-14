@@ -27,5 +27,9 @@ public class Doenca {
 	public void setNomedoenca(String nomedoenca) {
 		this.nomedoenca = nomedoenca;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Doenca [id_doenca=" + id_doenca + ", nomedoenca=" + nomedoenca + ", id_vacina=" + id_vacina + "]";
+	}
 }

@@ -8,6 +8,7 @@ public class Paciente {
 	private int idade;
 	private String endereco;
 	private String telefone;
+	private int id_regiao;
 	
 	public int getId_paciente() {
 		return id_paciente;
@@ -38,5 +39,16 @@ public class Paciente {
 	}
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+	public int getId_regiao() {
+		return id_regiao;
+	}
+	public void setId_regiao(int id_regiao) {
+		this.id_regiao = id_regiao;
+	}
+	@Override
+	public String toString() {
+		return "Paciente [id_paciente=" + id_paciente + ", nome=" + nome + ", idade=" + idade + ", endereco=" + endereco
+				+ ", telefone=" + telefone + ", id_regiao=" + id_regiao + "]";
 	}
 }

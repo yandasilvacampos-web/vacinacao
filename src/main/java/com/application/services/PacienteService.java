@@ -1,11 +1,13 @@
 package com.application.services;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import com.application.entities.Paciente;
+import com.application.entities.Regiao;
 
 public class PacienteService {
       
@@ -30,6 +32,7 @@ public class PacienteService {
                 pacientes.add(mapRowToPaciente(resultSet));
             }
         } catch (Exception e) {
+        	e.printStackTrace();
             System.out.println("Erro ao listar os pacientes: " );
         }     
         return pacientes;
@@ -37,25 +40,56 @@ public class PacienteService {
 
     public List<Paciente> findByNome(String nome) {
         List<Paciente> pacientes = new ArrayList<>();
-        Statement statement;
-        
+
         try {
-            String query = String.format(
-                "SELECT id_paciente, nome, idade, endereco, telefone FROM public.paciente WHERE nome ILIKE 's';", 
-                nome
-            );
-            
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            
+            String query = """
+                SELECT id_paciente, nome, idade, endereco, telefone
+                FROM public.paciente
+                WHERE nome LIKE ?
+                """;
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, "%" + nome + "%");
+
+            ResultSet resultSet = statement.executeQuery();
+
             while (resultSet.next()) {
-               
                 pacientes.add(mapRowToPaciente(resultSet));
             }
+
         } catch (Exception e) {
-            System.out.println("Erro ao tentar buscar paciente por nome: " );
+            System.out.println("Erro ao tentar buscar paciente por nome:");
+            e.printStackTrace();
         }
+
         return pacientes;
+    }
+    
+    public List<Paciente> findUsersByRegiao(int idRegiao) {
+    	
+        List<Paciente> listaPacientes = new ArrayList<>();
+        Statement Statement;
+        
+        try {
+       
+            String query = String.format(
+                "SELECT * FROM paciente WHERE id_regiao = %d;", 
+                idRegiao
+            );
+            
+            Statement = connection.createStatement();
+            ResultSet resultSet = Statement.executeQuery(query); 
+            
+            while (resultSet.next()) {
+                listaPacientes.add(mapRowToPaciente(resultSet));
+            }
+            
+        } catch (Exception e) {
+           
+            System.out.println("Erro buscar os pacientes por regiao " + idRegiao + ": ");
+        }
+        
+        return listaPacientes;
     }
 
     public void cadastrar(Paciente paciente) {

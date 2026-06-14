@@ -6,7 +6,6 @@ public class Vacina {
 	private String tipo;
 	private String fabricante;
 	private String nome;
-	private Integer id_doenca;
 	
 	public Integer getId_vacina() {
 		return id_vacina;
@@ -32,13 +31,9 @@ public class Vacina {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Integer getId_doenca() {
-		return id_doenca;
+	@Override
+	public String toString() {
+		return "Vacina [id_vacina=" + id_vacina + ", tipo=" + tipo + ", fabricante=" + fabricante + ", nome=" + nome
+				+ "]";
 	}
-	public void setId_doenca(Integer id_doenca) {
-		this.id_doenca = id_doenca;
-	}
-	
-		
-
 }
